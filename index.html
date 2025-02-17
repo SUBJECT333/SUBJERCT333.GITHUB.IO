@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Golden Ratio Calculator</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1f2b 0%, #2d3748 100%);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2d3748;
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a1f2b;
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            font-weight: 700;
+        }
+
+        .input-group {
+            margin-bottom: 2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .results {
+            margin-top: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .results.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .wallet-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease;
+        }
+
+        .wallet-card:hover {
+            transform: translateX(5px);
+        }
+
+        .wallet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .wallet-title {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .btc-amount {
+            font-family: monospace;
+            font-size: 1.1rem;
+            color: #2d3748;
+            font-weight: 500;
+        }
+
+        .percentage {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ Bitcoin Golden Ratio Allocator</h1>
+        
+        <div class="input-group">
+            <label>Enter BTC Amount</label>
+            <input type="number" id="btcAmount" step="0.00000001" min="0" placeholder="0.00000000">
+        </div>
+
+        <button onclick="calculateSplit()">Calculate Split</button>
+
+        <div id="results" class="results">
+            <div class="wallet-card">
+                <div class="wallet-header">
+                    <span class="wallet-title">3 Year Wallet</span>
+                    <span class="percentage">(61.8%)</span>
+                </div>
+                <div id="amount3yr" class="btc-amount">0.00000000 BTC</div>
+            </div>
+
+            <div class="wallet-card">
+                <div class="wallet-header">
+                    <span class="wallet-title">6 Year Wallet</span>
+                    <span class="percentage">(23.6%)</span>
+                </div>
+                <div id="amount6yr" class="btc-amount">0.00000000 BTC</div>
+            </div>
+
+            <div class="wallet-card">
+                <div class="wallet-header">
+                    <span class="wallet-title">9 Year Wallet</span>
+                    <span class="percentage">(14.6%)</span>
+                </div>
+                <div id="amount9yr" class="btc-amount">0.00000000 BTC</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const PHI = 1.618034;
+        
+        function calculateSplit() {
+            const btcAmount = parseFloat(document.getElementById('btcAmount').value);
+            
+            if (isNaN(btcAmount) || btcAmount <= 0) {
+                alert('Please enter a valid positive BTC amount');
+                return;
+            }
+
+            const denom9yr = 1;
+            const denom6yr = PHI;
+            const denom3yr = PHI * PHI;
+            const totalDenom = denom3yr + denom6yr + denom9yr;
+
+            const amount3yr = btcAmount * (denom3yr / totalDenom);
+            const amount6yr = btcAmount * (denom6yr / totalDenom);
+            const amount9yr = btcAmount * (denom9yr / totalDenom);
+
+            document.getElementById('amount3yr').textContent = `${amount3yr.toFixed(8)} BTC`;
+            document.getElementById('amount6yr').textContent = `${amount6yr.toFixed(8)} BTC`;
+            document.getElementById('amount9yr').textContent = `${amount9yr.toFixed(8)} BTC`;
+
+            document.getElementById('results').classList.add('visible');
+        }
+
+        // Add keyboard support
+        document.getElementById('btcAmount').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculateSplit();
+            }
+        });
+    </script>
+</body>
+</html>
